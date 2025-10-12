@@ -17,7 +17,8 @@
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spigot.version>1.21-R0.1-SNAPSHOT</spigot.version>
-        <lightapi.version>1.21.0</lightapi.version> </properties>
+        <lightapi.version>1.20.6-R0.1-SNAPSHOT</lightapi.version> 
+    </properties>
 
     <build>
         <plugins>
