@@ -5,8 +5,7 @@
     
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.nonkunghc</groupId>
-    <artifactId>DualHandGlow</artifactId> 
+    <groupId>com.nonkungch</groupId> <artifactId>DualHandGlow</artifactId> 
     <version>1.0</version>
     <packaging>jar</packaging>
 
@@ -66,6 +65,5 @@
             <version>${spigot.version}</version>
             <scope>provided</scope>
         </dependency>
-        
-        </dependencies>
+    </dependencies>
 </project>
