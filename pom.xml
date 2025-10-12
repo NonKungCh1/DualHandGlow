@@ -10,11 +10,13 @@
     <packaging>jar</packaging>
 
     <name>DualHandGlow</name>
-    <description>Off-hand swapper and Dynamic Light plugin using ProtocolLib.</description>
+    <description>Off-hand Swapper with optional Dynamic Light using ProtocolLib.</description>
 
     <properties>
-        <java.version>21</java.version> <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>1.21-R0.1-SNAPSHOT</spigot.version> <protocollib.version>5.2.1</protocollib.version> 
+        <java.version>21</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spigot.version>1.21-R0.1-SNAPSHOT</spigot.version>
+        <protocollib.version>5.2.1</protocollib.version>
     </properties>
 
     <build>
@@ -55,11 +57,7 @@
             <id>papermc</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
-        <repository>
-            <id>dmulloy2-repo</id>
-            <url>https://repo.dmulloy2.net/repository/public/</url>
-        </repository>
-    </repositories>
+        </repositories>
 
     <dependencies>
         <dependency>
@@ -70,10 +68,10 @@
         </dependency>
 
         <dependency>
-            <groupId>com.comphenix.protocol</groupId>
+            <groupId>net.dmulloy2</groupId>
             <artifactId>ProtocolLib</artifactId>
             <version>${protocollib.version}</version>
-            <scope>provided</scope>
+            <scope>provided</scope> 
         </dependency>
     </dependencies>
 </project>
