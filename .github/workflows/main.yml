@@ -1,43 +1,48 @@
-name: Build DualHandGlow Plugin
+# .github/workflows/maven.yml
 
-# เงื่อนไขการสั่งให้ Action ทำงาน
+name: Maven Build Plugin (NMS)
+
 on:
   push:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+  # ให้สามารถรัน Manual ได้ด้วย
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     
+    # กำหนดให้ใช้ Java 21 ตามที่ระบุใน pom.xml
+    strategy:
+      matrix:
+        java: [ 21 ]
+
     steps:
-      # 1. Checkout โค้ด
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      
-      # 2. ตั้งค่า Java JDK 21
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: maven
+    - name: Checkout Code
+      uses: actions/checkout@v4
 
-      # 3. ตรวจสอบ Dependencies (ไม่จำเป็นแต่ช่วยยืนยัน ProtocolLib ถูกดึงมาใช้)
-      - name: Verify Dependencies (including ProtocolLib)
-        # คำสั่งนี้จะยืนยันว่า Maven สามารถ resolve dependencies ทั้งหมดได้
-        run: mvn dependency:resolve
+    # ตั้งค่า Java Environment และ Caching Maven
+    - name: Set up JDK ${{ matrix.java }}
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ matrix.java }}
+        distribution: 'temurin'
+        cache: 'maven' # เปิดใช้งาน Maven Cache เพื่อความเร็ว
 
-      # 4. Build Project ด้วย Maven
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
-        
-      # 5. อัปโหลด Artifact
-      - name: Upload Plugin Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: DualHandGlow-Plugin
-          # ไฟล์ JAR ที่สร้างขึ้น (ไม่มี ProtocolLib รวมอยู่)
-          path: target/DualHandGlow-1.0.jar 
-          retention-days: 7
+    # สร้างและคอมไพล์ JAR ด้วย Maven
+    # ใช้คำสั่ง clean package เพื่อคอมไพล์, รันเทส, และสร้าง JAR
+    - name: Build with Maven and Shade
+      run: mvn -B clean package --file pom.xml
+
+    # อัปโหลด Artifact (ไฟล์ JAR ที่เสร็จสมบูรณ์)
+    # ไฟล์ JAR จะถูกสร้างใน target/ ตามที่ maven-shade-plugin กำหนด
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: DualHandGlow-${{ github.sha }} # ชื่อไฟล์ที่อัปโหลด
+        path: target/DualHandGlow-1.0.jar # ชื่อไฟล์ที่ได้จาก pom.xml
+
+    - name: Build Success Message
+      run: echo "The plugin has been successfully built and the JAR is available as an artifact."
