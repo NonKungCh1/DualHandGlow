@@ -1,14 +1,14 @@
 # plugin.yml
 name: DualHandGlow
 version: 1.0
-main: com.yourname.dualhandglow.DualHandGlow
-api-version: 1.21
-author: NonKungCh
-depend: [ProtocolLib] # ต้องประกาศการพึ่งพา ProtocolLib
+main: com.nonkungch.dualhandglow.DualHandGlow
+api-version: 1.21 # รองรับ 1.21+
+author: NonKungCH
+# softdepend: [ProtocolLib] ถูกลบออกแล้ว
 
 commands:
   offhand:
-    description: Swaps the item in your main hand and off hand, and manages light effects.
+    description: Swaps the item in your main hand and off hand.
     usage: /<command>
     aliases: [ofh]
     permission: dualhandglow.swap
