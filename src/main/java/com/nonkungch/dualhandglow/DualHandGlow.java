@@ -2,27 +2,30 @@
 
 package com.nonkungch.dualhandglow;
 
-import com.nonkungch.dualhandglow.nms.LightPacketInjector; // ต้องสร้างคลาสนี้
+import com.nonkungch.dualhandglow.command.OffHandCommand;
+import com.nonkungch.dualhandglow.light.DynamicLightHandler;
+import com.nonkungch.dualhandglow.task.GlowTask;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class DualHandGlow extends JavaPlugin {
 
-    private LightPacketInjector lightInjector;
+    private DynamicLightHandler lightHandler;
     
     @Override
     public void onEnable() {
-        // 1. ลงทะเบียนคำสั่งสลับมือ
+        // 1. Initial Light Handler
+        lightHandler = new DynamicLightHandler(this);
+        
+        // 2. ลงทะเบียนคำสั่งสลับมือ
         this.getCommand("offhand").setExecutor(new OffHandCommand());
         
-        // 2. Initial NMS Light Injector (สมมติว่า LightPacketInjector ถูกสร้างสำเร็จ)
-        try {
-            lightInjector = new LightPacketInjector();
-            // 3. เริ่มงาน Task
-            new GlowTask(this, lightInjector).runTaskTimer(this, 0L, 4L); 
-            getLogger().info("Custom Dynamic Light functionality ENABLED.");
-        } catch (Exception e) {
-            getLogger().severe("Failed to initialize NMS Light Injector! Dynamic Light is disabled.");
-            e.printStackTrace();
+        // 3. เริ่มงาน Task
+        if (lightHandler.isLightApiAvailable()) {
+            // Task จะรับ Handler ตัวใหม่ไปใช้
+            new GlowTask(this, lightHandler).runTaskTimer(this, 0L, 4L); 
+            getLogger().info("Dynamic Light functionality ENABLED using LightAPI.");
+        } else {
+            getLogger().warning("LightAPI not found. Dynamic Light is disabled. Please install LightAPI for full functionality.");
         }
         
         getLogger().info("DualHandGlow (v" + getDescription().getVersion() + ") has been enabled.");
@@ -31,8 +34,8 @@ public class DualHandGlow extends JavaPlugin {
     @Override
     public void onDisable() {
         // ลบแสงทั้งหมดเมื่อปลั๊กอินปิด
-        if (lightInjector != null) {
-            lightInjector.removeAllLights(getServer().getOnlinePlayers());
+        if (lightHandler != null) {
+            lightHandler.removeAllLights(getServer().getOnlinePlayers());
         }
         getLogger().info("DualHandGlow has been disabled.");
     }
