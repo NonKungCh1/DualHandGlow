@@ -72,7 +72,7 @@
         </dependency>
 
         <dependency>
-            <groupId>net.dmulloy2</groupId>
+            <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
             <version>${protocollib.version}</version>
             <scope>provided</scope> 
