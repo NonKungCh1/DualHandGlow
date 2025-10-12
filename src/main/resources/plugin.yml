@@ -2,7 +2,7 @@
 name: DualHandGlow
 version: 1.0
 main: com.yourname.dualhandglow.DualHandGlow
-api-version: 1.19
+api-version: 1.21
 author: NonKungCh
 depend: [ProtocolLib] # ต้องประกาศการพึ่งพา ProtocolLib
 
