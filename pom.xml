@@ -5,19 +5,18 @@
     
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.nonkungch</groupId>
-    <artifactId>DualHandGlow</artifactId>
+    <groupId>com.nonkunghc</groupId>
+    <artifactId>DualHandGlow</artifactId> 
     <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>DualHandGlow</name>
-    <description>Off-hand Swapper with Dynamic Light using LightAPI.</description>
+    <description>Off-hand Swapper with Block Light.</description>
 
     <properties>
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spigot.version>1.21-R0.1-SNAPSHOT</spigot.version>
-        <lightapi.version>1.20.6-R0.1-SNAPSHOT</lightapi.version> 
     </properties>
 
     <build>
@@ -58,10 +57,6 @@
             <id>papermc</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
-        <repository>
-            <id>lightapi-repo</id>
-            <url>https://repo.codemc.io/repository/maven-public/</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -71,12 +66,6 @@
             <version>${spigot.version}</version>
             <scope>provided</scope>
         </dependency>
-
-        <dependency>
-            <groupId>dev.shibomb</groupId>
-            <artifactId>lightapi</artifactId>
-            <version>${lightapi.version}</version>
-            <scope>provided</scope> 
-        </dependency>
-    </dependencies>
+        
+        </dependencies>
 </project>
