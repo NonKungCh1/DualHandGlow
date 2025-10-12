@@ -1,6 +1,6 @@
 # .github/workflows/maven.yml
 
-name: Maven Build Plugin (Paper/LightAPI)
+name: Maven Build Plugin (DualHandGlow) # แก้ไขชื่อ Build
 
 on:
   push:
@@ -33,8 +33,8 @@ jobs:
         cache: 'maven' # เปิดใช้งาน Maven Cache
 
     # สร้างและคอมไพล์ JAR ด้วย Maven
-    # clean package จะดาวน์โหลด Paper API และ LightAPI จาก repositories ที่กำหนด แล้วสร้าง JAR
-    - name: Build with Maven and Shade
+    # clean package จะดาวน์โหลด Paper API และสร้าง JAR
+    - name: Build with Maven and Shade # ลบคำที่เกี่ยวข้องกับ LightAPI
       run: mvn -B clean package --file pom.xml
 
     # อัปโหลด Artifact (ไฟล์ JAR ที่เสร็จสมบูรณ์)
@@ -42,8 +42,8 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: DualHandGlow-${{ github.sha }}
-        # ชื่อไฟล์ JAR ที่ได้จาก pom.xml และ maven-shade-plugin
+        # ชื่อไฟล์ JAR ที่ได้จาก pom.xml
         path: target/DualHandGlow-1.0.jar 
 
     - name: Build Success Message
-      run: echo "The plugin has been successfully built and the JAR is available as an artifact."
+      run: echo "The DualHandGlow plugin has been successfully built and the JAR is available as an artifact."
