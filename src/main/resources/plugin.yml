@@ -2,9 +2,10 @@
 name: DualHandGlow
 version: 1.0
 main: com.nonkungch.dualhandglow.DualHandGlow
-api-version: 1.21 # รองรับ 1.21+
+api-version: 1.21
 author: NonKungCH
-# softdepend: [ProtocolLib] ถูกลบออกแล้ว
+softdepend: [LightAPI] # ระบุว่าปลั๊กอินนี้ใช้ LightAPI แต่ไม่จำเป็นต้องมี
+# ... (Commands เหมือนเดิม) ...
 
 commands:
   offhand:
