@@ -1,4 +1,4 @@
-package com.nonkunghc.offhandlight;
+package com.nonkungch.dualhandglow; // *** Package ถูกแก้ไขแล้ว ***
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -20,18 +20,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-// เปลี่ยนชื่อคลาสจาก OffhandLight เป็น DualHandGlow
+// ชื่อคลาสหลัก: DualHandGlow
 public class DualHandGlow extends JavaPlugin implements Listener {
 
-    // เก็บตำแหน่งบล็อกแสงปัจจุบันของแต่ละผู้เล่น (block coords)
     private final Map<UUID, Location> playerLightBlock = new HashMap<>();
-    // เก็บ ArmorStand แสดงไอเท็มมือรองสำหรับแต่ละผู้เล่น
     private final Map<UUID, ArmorStand> fakeOffhands = new HashMap<>();
     private BukkitTask mainTask;
 
     @Override
     public void onEnable() {
-        getLogger().info("✅ DualHandGlow Enabled"); // อัปเดตข้อความ
+        getLogger().info("✅ DualHandGlow (Block Light Edition) Enabled!"); 
         Bukkit.getPluginManager().registerEvents(this, this);
         startUpdater();
     }
@@ -40,7 +38,6 @@ public class DualHandGlow extends JavaPlugin implements Listener {
     public void onDisable() {
         if (mainTask != null) mainTask.cancel();
 
-        // ลบบล็อกแสงทั้งหมดที่เราวางไว้
         for (Location loc : playerLightBlock.values()) {
             if (loc != null && loc.getBlock().getType() == Material.LIGHT) {
                 loc.getBlock().setType(Material.AIR);
@@ -48,58 +45,48 @@ public class DualHandGlow extends JavaPlugin implements Listener {
         }
         playerLightBlock.clear();
 
-        // ลบ ArmorStand ทั้งหมด
         for (ArmorStand stand : fakeOffhands.values()) {
             if (stand != null && !stand.isDead()) stand.remove();
         }
         fakeOffhands.clear();
 
-        getLogger().info("✅ DualHandGlow Disabled - cleaned up"); // อัปเดตข้อความ
+        getLogger().info("✅ DualHandGlow Disabled - cleaned up all lights and entities.");
     }
 
     private void startUpdater() {
-        // อัปเดตทุก 10 tick (0.5s)
         mainTask = Bukkit.getScheduler().runTaskTimer(this, () -> {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                // ตรวจของในมือรอง
                 ItemStack off = p.getInventory().getItemInOffHand();
                 boolean hasOff = off != null && off.getType() != Material.AIR;
 
                 if (hasOff && isLightItem(off.getType())) {
                     
-                    // คำนวณบล็อกที่จะวาง light: บล็อกใต้ตัวผู้เล่น (floor)
                     Location playerLoc = p.getLocation();
                     Location blockLoc = playerLoc.clone();
                     
-                    // *** โค้ดที่วางแสงใต้เท้าอยู่แล้ว ***
+                    // คำนวณตำแหน่งแสงที่เท้า (Y-1.0)
                     blockLoc.setX(Math.floor(blockLoc.getX()) + 0.5); 
-                    blockLoc.setY(Math.floor(blockLoc.getY()) - 1); // วางใต้เท้า
+                    blockLoc.setY(Math.floor(blockLoc.getY()) - 1); // <--- วางแสงที่เท้า
                     blockLoc.setZ(Math.floor(blockLoc.getZ()) + 0.5);
                     Block targetBlock = blockLoc.getBlock();
-                    // **********************************
 
                     Location prev = playerLightBlock.get(p.getUniqueId());
                     if (prev == null || !isSameBlock(prev, blockLoc)) {
-                        // ลบของเก่า
                         if (prev != null && prev.getBlock().getType() == Material.LIGHT) {
                             prev.getBlock().setType(Material.AIR);
                         }
-                        // วาง light ถ้าว่าง
                         if (targetBlock.getType() == Material.AIR) {
                             targetBlock.setType(Material.LIGHT);
                             targetBlock.setBlockData(Bukkit.createBlockData("minecraft:light[level=15]"));
                             playerLightBlock.put(p.getUniqueId(), targetBlock.getLocation());
                         } else {
-                            // ถ้าบล็อกไม่ว่าง ให้เก็บเป็น Location ล่าสุด เพื่อหลีกเลี่ยงการเขียนซ้ำ
                             playerLightBlock.put(p.getUniqueId(), targetBlock.getLocation());
                         }
                     }
 
-                    // จัดการ ArmorStand ให้แสดงของในมือรอง (สำหรับ Bedrock/Geyser)
                     updateFakeOffhand(p, off);
 
                 } else {
-                    // ผู้เล่นไม่มีไอเท็มให้แสงในมือรอง -> ลบบล็อกแสง และ ArmorStand
                     Location prev = playerLightBlock.remove(p.getUniqueId());
                     if (prev != null && prev.getBlock().getType() == Material.LIGHT) {
                         prev.getBlock().setType(Material.AIR);
@@ -133,7 +120,6 @@ public class DualHandGlow extends JavaPlugin implements Listener {
         UUID id = p.getUniqueId();
         ArmorStand stand = fakeOffhands.get(id);
 
-        // สร้างครั้งเดียวเมื่อยังไม่มี
         if (stand == null || stand.isDead()) {
             ArmorStand s = p.getWorld().spawn(p.getLocation(), ArmorStand.class);
             s.setInvisible(true);
@@ -147,7 +133,6 @@ public class DualHandGlow extends JavaPlugin implements Listener {
             return;
         }
 
-        // ถ้าผู้เล่นย้ายบล็อก ให้ย้าย ArmorStand และอัปเดตไอเท็ม
         Location standLoc = stand.getLocation();
         Location needed = handLocationFor(p);
 
@@ -155,7 +140,6 @@ public class DualHandGlow extends JavaPlugin implements Listener {
             stand.teleport(needed);
         }
 
-        // อัปเดตไอเท็มเฉพาะเมื่อแตกต่าง (ลดการเขียน)
         ItemStack cur = stand.getEquipment().getItem(EquipmentSlot.HAND);
         if (cur == null || !cur.isSimilar(offItem)) {
             stand.getEquipment().setItem(EquipmentSlot.HAND, offItem.clone());
@@ -163,7 +147,6 @@ public class DualHandGlow extends JavaPlugin implements Listener {
     }
 
     private Location handLocationFor(Player p) {
-        // ตำแหน่งโดยประมาณของมือรอง
         Location loc = p.getLocation().clone();
         loc.add(0.25 * Math.sin(Math.toRadians(p.getLocation().getYaw())), 1.45, -0.25 * Math.cos(Math.toRadians(p.getLocation().getYaw())));
         loc.setPitch(0);
@@ -179,7 +162,6 @@ public class DualHandGlow extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
-        // Cleanup เมื่อผู้เล่นออกจากเกม
         UUID id = e.getPlayer().getUniqueId();
         Location prev = playerLightBlock.remove(id);
         if (prev != null && prev.getBlock().getType() == Material.LIGHT) {
@@ -197,7 +179,7 @@ public class DualHandGlow extends JavaPlugin implements Listener {
         }
         Player p = (Player) sender;
 
-        // *** ส่วนที่แก้ไข: ให้รองรับ label "offhand" หรือ "ofh" ***
+        // รองรับคำสั่งหลัก "offhand" และ Alias "ofh"
         if (cmd.getName().equalsIgnoreCase("offhand") || label.equalsIgnoreCase("ofh")) {
             
             ItemStack main = p.getInventory().getItemInMainHand();
@@ -211,4 +193,4 @@ public class DualHandGlow extends JavaPlugin implements Listener {
         }
         return false;
     }
-  }
+}
