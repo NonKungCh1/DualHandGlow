@@ -1,17 +1,18 @@
 # .github/workflows/maven.yml
 
-name: Maven Build Plugin (NMS)
+name: Maven Build Plugin (Paper/LightAPI)
 
 on:
   push:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-  # ให้สามารถรัน Manual ได้ด้วย
+  # อนุญาตให้รัน Manual ได้
   workflow_dispatch:
 
 jobs:
   build:
+    # รันบนเครื่อง Linux
     runs-on: ubuntu-latest
     
     # กำหนดให้ใช้ Java 21 ตามที่ระบุใน pom.xml
@@ -29,20 +30,20 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
         distribution: 'temurin'
-        cache: 'maven' # เปิดใช้งาน Maven Cache เพื่อความเร็ว
+        cache: 'maven' # เปิดใช้งาน Maven Cache
 
     # สร้างและคอมไพล์ JAR ด้วย Maven
-    # ใช้คำสั่ง clean package เพื่อคอมไพล์, รันเทส, และสร้าง JAR
+    # clean package จะดาวน์โหลด Paper API และ LightAPI จาก repositories ที่กำหนด แล้วสร้าง JAR
     - name: Build with Maven and Shade
       run: mvn -B clean package --file pom.xml
 
     # อัปโหลด Artifact (ไฟล์ JAR ที่เสร็จสมบูรณ์)
-    # ไฟล์ JAR จะถูกสร้างใน target/ ตามที่ maven-shade-plugin กำหนด
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: DualHandGlow-${{ github.sha }} # ชื่อไฟล์ที่อัปโหลด
-        path: target/DualHandGlow-1.0.jar # ชื่อไฟล์ที่ได้จาก pom.xml
+        name: DualHandGlow-${{ github.sha }}
+        # ชื่อไฟล์ JAR ที่ได้จาก pom.xml และ maven-shade-plugin
+        path: target/DualHandGlow-1.0.jar 
 
     - name: Build Success Message
       run: echo "The plugin has been successfully built and the JAR is available as an artifact."
