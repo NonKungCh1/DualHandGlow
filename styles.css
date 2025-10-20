@@ -1,154 +1,211 @@
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f2f5;
-    color: #333;
-    margin: 0;
-    padding: 0;
-    line-height: 1.6;
+/* นำเข้า Font Kanit และ Icons */
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+:root {
+    --mc-green-dark: #2e7d32;
+    --mc-green-light: #4caf50;
+    --mc-bg-color: #f0f2f5;
+    --mc-card-bg: #ffffff;
+    --mc-text-color: #333;
+    --mc-accent-color: #ff9800; /* สีส้มทองเหมือนแสงไฟ */
 }
 
+/* พื้นฐานและการทำให้ Responsive */
+body {
+    font-family: 'Kanit', sans-serif;
+    background-color: var(--mc-bg-color);
+    color: var(--mc-text-color);
+    margin: 0;
+    padding: 0;
+    line-height: 1.7;
+    transition: background-color 0.3s;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ส่วน Header และ Navigation */
 header {
-    background-color: #388e3c; /* เขียวเข้มแบบ Minecraft */
+    background: linear-gradient(135deg, var(--mc-green-dark), #388e3c);
     color: white;
-    padding: 40px 20px;
+    padding: 30px 0;
     text-align: center;
-    border-bottom: 5px solid #2e7d32;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 header h1 {
-    margin-top: 0;
-    font-size: 2.5em;
-    letter-spacing: 1.5px;
+    font-size: 2.8em;
+    font-weight: 700;
+    margin: 0 0 5px 0;
 }
 
+.edition {
+    font-size: 0.6em;
+    font-weight: 400;
+    opacity: 0.8;
+}
+
+nav {
+    margin-top: 20px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    margin: 0 15px;
+    padding: 5px 10px;
+    border-bottom: 2px solid transparent;
+    transition: border-bottom 0.3s, color 0.3s;
+}
+
+nav a:hover {
+    border-bottom: 2px solid var(--mc-accent-color);
+    color: var(--mc-accent-color);
+}
+
+/* ส่วน Main Content */
 main {
-    max-width: 1000px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    padding: 40px 20px;
 }
 
-section {
-    margin-bottom: 40px;
-    padding: 20px;
-    border-left: 5px solid #4caf50; /* เขียวอ่อน */
-    background-color: #fafafa;
-    border-radius: 4px;
+.card {
+    background-color: var(--mc-card-bg);
+    padding: 30px;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid var(--mc-green-light);
+    transition: transform 0.3s;
 }
 
-h2, h3 {
-    color: #2e7d32; /* เขียวเข้ม */
-    border-bottom: 2px dashed #e0e0e0;
-    padding-bottom: 5px;
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
-ul, ol {
-    padding-left: 20px;
+h2 {
+    color: var(--mc-green-dark);
+    font-size: 2em;
+    font-weight: 700;
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
 }
 
-li {
+h3 {
+    color: var(--mc-accent-color);
+    font-size: 1.4em;
+    margin-top: 25px;
+}
+
+/* List สวยงาม */
+.feature-list {
+    list-style: none;
+    padding: 0;
+}
+
+.feature-list li {
+    padding-left: 1.5em;
+    text-indent: -1.5em;
     margin-bottom: 10px;
 }
 
-/* ตารางคำสั่ง */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-}
-
-table th, table td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: left;
-}
-
-table th {
-    background-color: #4caf50;
-    color: white;
+.feature-list li::before {
+    content: "✔️";
+    display: block;
+    float: left;
+    width: 1.5em;
+    color: var(--mc-green-light);
     font-weight: bold;
 }
 
-table tr:nth-child(even) {
-    background-color: #f2f2f2;
+/* ตารางและโค้ด */
+.command-box {
+    background-color: #fff3e0;
+    border: 1px solid #ffcc80;
+    padding: 15px;
+    border-radius: 8px;
+    font-family: monospace;
+}
+
+.command-box p {
+    margin: 5px 0;
 }
 
 code {
-    background-color: #e0f7fa;
-    color: #00796b;
-    padding: 2px 4px;
-    border-radius: 3px;
-    font-weight: bold;
+    background-color: #e8e8e8;
+    color: var(--mc-green-dark);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
 }
 
 pre {
     background-color: #1c1c1c;
     color: #e0f7fa;
     padding: 15px;
-    border-radius: 5px;
+    border-radius: 8px;
     overflow-x: auto;
+    font-family: monospace;
+    font-size: 0.9em;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-hr {
-    border: 0;
-    height: 1px;
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #4caf50, rgba(0, 0, 0, 0));
-    margin: 40px 0;
+/* Item Grid */
+.item-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
 }
 
+.item-grid span {
+    background-color: var(--mc-green-light);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.item-grid i {
+    margin-right: 8px;
+    color: var(--mc-accent-color);
+}
+
+/* Footer */
 footer {
     text-align: center;
     padding: 20px;
     background-color: #333;
     color: #bbb;
     margin-top: 30px;
+    border-top: 3px solid #2e2e2e;
 }
 
-/* ปรับปรุงการแสดงผลบนอุปกรณ์เล็ก */
-@media (max-width: 600px) {
+/* Media Queries สำหรับ Responsive Design (ปรับให้พอดีหน้าจออัตโนมัติ) */
+@media (max-width: 768px) {
     header h1 {
         font-size: 2em;
     }
-    main {
-        margin: 10px;
-        padding: 10px;
-    }
-    table, table thead, table tbody, table th, table td, table tr {
+    nav a {
         display: block;
+        margin: 5px 0;
     }
-    table thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
+    main {
+        padding: 20px 10px;
     }
-    table tr {
-        border: 1px solid #ccc;
-        margin-bottom: 15px;
-        background-color: #fff;
+    .card {
+        padding: 20px;
     }
-    table td {
-        border: none;
-        border-bottom: 1px solid #eee;
-        position: relative;
-        padding-left: 50%;
-        text-align: right;
+    .item-grid {
+        justify-content: center;
     }
-    table td:before {
-        position: absolute;
-        top: 6px;
-        left: 6px;
-        width: 45%;
-        padding-right: 10px;
-        white-space: nowrap;
-        text-align: left;
-        font-weight: bold;
-        color: #2e7d32;
-    }
-    table td:nth-of-type(1):before { content: "คำสั่ง"; }
-    table td:nth-of-type(2):before { content: "ชื่อย่อ"; }
-    table td:nth-of-type(3):before { content: "คำอธิบาย"; }
-    table td:nth-of-type(4):before { content: "สิทธิ์"; }
-  }
-  
+}
